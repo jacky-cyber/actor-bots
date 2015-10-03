@@ -1,6 +1,6 @@
 package im.actor.bots.parser;
 
-public class MessageCommand extends MessageType {
+public class MessageCommand extends ParsedMessage {
 
     private String command;
     private String args;

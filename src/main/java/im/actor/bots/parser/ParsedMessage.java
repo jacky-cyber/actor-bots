@@ -1,8 +1,7 @@
 package im.actor.bots.parser;
 
-public class StringMatcher {
-
-    public static MessageType matchType(String message) {
+public abstract class ParsedMessage {
+    public static ParsedMessage matchType(String message) {
         message = message.trim();
         if (message.startsWith("/")) {
             String[] data = ParsingUtils.splitFirstWord(message);

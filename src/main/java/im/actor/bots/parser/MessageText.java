@@ -1,6 +1,6 @@
 package im.actor.bots.parser;
 
-public class MessageText extends MessageType {
+public class MessageText extends ParsedMessage {
 
     private String text;
 
