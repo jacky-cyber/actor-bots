@@ -2,6 +2,9 @@ package im.actor.bots.util;
 
 import java.util.Random;
 
+/**
+ * Basic strings for bots
+ */
 public class Strings {
     public static final String CANCEL_MESSAGE = "Operation cancelled. Anything else I can do for you?\n" +
             "\n" +

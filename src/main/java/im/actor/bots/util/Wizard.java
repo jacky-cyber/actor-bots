@@ -4,6 +4,9 @@ import im.actor.bot.BotMessages;
 import im.actor.botkit.RemoteBot;
 import im.actor.bots.parser.MessageType;
 
+/**
+ * Bot wizard. Used for separating logic of various states of bot actor.
+ */
 public abstract class Wizard {
 
     private RemoteBot bot;

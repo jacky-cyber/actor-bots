@@ -8,7 +8,10 @@ import im.actor.bots.parser.MessageCommand;
 import im.actor.bots.parser.MessageType;
 import im.actor.bots.parser.StringMatcher;
 
-public class BaseBot extends RemoteBot {
+/**
+ * Useful extension on basic bot that allows you to easier bot building
+ */
+public class MagicBot extends RemoteBot {
 
     private static final String COMMAND_START = "start";
     private static final String COMMAND_HELP = "help";
@@ -19,7 +22,7 @@ public class BaseBot extends RemoteBot {
     private ArrayList<BotMessages.TextMessage> pendingMessages = new ArrayList<BotMessages.TextMessage>();
     private boolean isPaused = false;
 
-    public BaseBot(String token, String endpoint) {
+    public MagicBot(String token, String endpoint) {
         super(token, endpoint);
     }
 
@@ -73,10 +76,22 @@ public class BaseBot extends RemoteBot {
         }
     }
 
+    /**
+     * Implement this method for message handling
+     *
+     * @param msg         parsed message
+     * @param baseMessage raw message
+     * @return is message handled
+     */
     public boolean onMessage(MessageType msg, BotMessages.TextMessage baseMessage) {
         return false;
     }
 
+    /**
+     * Start new Bot wizard
+     *
+     * @param wizard new wizard
+     */
     public void startWizard(Wizard wizard) {
         if (currentWizard != null) {
             currentWizard.cancelWizard();
@@ -85,6 +100,9 @@ public class BaseBot extends RemoteBot {
         currentWizard.startWizard();
     }
 
+    /**
+     * Pause receiving messages. Useful on async message processing.
+     */
     public void pauseMessages() {
         if (isPaused) {
             throw new RuntimeException();
@@ -92,6 +110,9 @@ public class BaseBot extends RemoteBot {
         isPaused = true;
     }
 
+    /**
+     * Resume receiving messages.
+     */
     public void resumeMessages() {
         if (!isPaused) {
             throw new RuntimeException();
@@ -105,6 +126,11 @@ public class BaseBot extends RemoteBot {
         }
     }
 
+    /**
+     * Called when help requested
+     *
+     * @param baseMessage request message
+     */
     public void onHelpRequested(BotMessages.TextMessage baseMessage) {
 
     }

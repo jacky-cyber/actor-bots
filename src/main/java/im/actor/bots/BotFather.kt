@@ -3,20 +3,20 @@ package im.actor.bots
 import im.actor.bot.BotMessages
 import im.actor.bots.parser.MessageCommand
 import im.actor.bots.parser.MessageType
-import im.actor.bots.util.BaseBot
+import im.actor.bots.util.MagicBot
 import im.actor.bots.util.StaticWizard
 
-class BotFather(token: String, endpoint: String) : BaseBot(token, endpoint) {
+class BotFather(token: String, endpoint: String) : MagicBot(token, endpoint) {
 
     override fun onMessage(msg: MessageType?, baseMessage: BotMessages.TextMessage): Boolean {
         if (msg is MessageCommand) {
             when (msg.command) {
                 "newbot" -> {
                     val wizard = StaticWizard(this, baseMessage.peer(), baseMessage.sender())
-                    wizard.cancelMessage = "Oops, thats embarassing. Creating of bot is cancelled."
-                    wizard.addStep("Ok, first of all we need some name for it. Please choose a name for it.")
-                    wizard.addStep("Ok, Good name. Now we need a nickname.")
-                    wizard.addStep("Bot created! Anything other?")
+                    wizard.cancelMessage = "Oops, that's embarrassing. Creating of bot is cancelled.\n\nSend /help for a list of commands."
+                    wizard.addStep("Новый бот? Хорошо. Как мы его назовем?")
+                    wizard.addStep("Отлично. Теперь нужно придумать ему ник.")
+                    wizard.addStep("Бот создан! Ваш токен для активации: <?????>")
                     startWizard(wizard)
                     return true
                 }
