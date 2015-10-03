@@ -6,20 +6,32 @@ import im.actor.bots.magic.MagicCommandFork
 import im.actor.bots.magic.MagicForkBot
 import im.actor.bots.parser.MessageCommand
 import im.actor.bots.parser.ParsedMessage
-import im.actor.bots.translate.TranslatingContext
+import im.actor.bots.translate.TranslateEngine
 import im.actor.bots.translate.tryCreateTranslator
+import shardakka.keyvalue.SimpleKeyValueJava
 
 /**
  * Translator bot
  */
 class Translator(baseBot: RemoteBot, chat: BotMessages.OutPeer) : MagicForkBot(baseBot, chat) {
 
-    val context = TranslatingContext()
+    var context: TranslatingContext? = null
 
     override fun preStart() {
         super.preStart()
 
-        context.engine = null;
+        context = TranslatingContext(createKeyValue("translating"));
+
+        val clientId = context!!.settings.syncGet("clientId").orElse(null);
+        val clientSecret = context!!.settings.syncGet("clientSecret").orElse(null);
+
+        if (clientId != null && clientSecret != null) {
+            context!!.engine = tryCreateTranslator(clientId, clientSecret)
+        }
+
+        if (context!!.engine != null) {
+            fork(RegisteredTranslator::class.java, context)
+        }
     }
 
     override fun onReceive(message: ParsedMessage?, sender: BotMessages.UserOutPeer?) {
@@ -35,7 +47,7 @@ class Translator(baseBot: RemoteBot, chat: BotMessages.OutPeer) : MagicForkBot(b
     }
 
     override fun onForkClosed() {
-        if (context.engine != null) {
+        if (context!!.engine != null) {
             fork(RegisteredTranslator::class.java, context)
         }
     }
@@ -75,6 +87,12 @@ class Translator(baseBot: RemoteBot, chat: BotMessages.OutPeer) : MagicForkBot(b
         override fun onReceive(command: String, args: String?, sender: BotMessages.UserOutPeer): Boolean {
             return false
         }
+
+        override fun onCancelled() {
+            super.onCancelled()
+
+            sendTextMessage("Continous translation stopped.")
+        }
     }
 
     class RegisterCommand(val context: TranslatingContext, baseBot: RemoteBot?, chatPeer: BotMessages.OutPeer?) : MagicCommandFork("register", baseBot, chatPeer) {
@@ -105,6 +123,8 @@ class Translator(baseBot: RemoteBot, chat: BotMessages.OutPeer) : MagicForkBot(b
                     clientSecret = null
                     sendTextMessage("Unable to log in to Microsoft translator service.\nPlease, enter Client Id again or /cancel to abort registration.")
                 } else {
+                    context.settings.syncUpsert("clientId", clientId)
+                    context.settings.syncUpsert("clientSecret", clientSecret)
                     context.engine = translator
                     sendTextMessage("Success! Now you can to translations. Type /help for more information.")
                     dismissFork()
@@ -112,4 +132,12 @@ class Translator(baseBot: RemoteBot, chat: BotMessages.OutPeer) : MagicForkBot(b
             }
         }
     }
+}
+
+/**
+ * Translation context
+ */
+class TranslatingContext(val settings: SimpleKeyValueJava<String>) {
+
+    var engine: TranslateEngine? = null
 }

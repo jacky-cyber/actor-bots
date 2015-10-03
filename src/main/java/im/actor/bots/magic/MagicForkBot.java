@@ -13,6 +13,9 @@ import im.actor.botkit.RemoteBot;
 import im.actor.bots.parser.MessageCommand;
 import im.actor.bots.parser.MessageText;
 import im.actor.bots.parser.ParsedMessage;
+import shardakka.ShardakkaExtension;
+import shardakka.keyvalue.SimpleKeyValue;
+import shardakka.keyvalue.SimpleKeyValueJava;
 
 public class MagicForkBot extends UntypedActor {
 
@@ -200,6 +203,10 @@ public class MagicForkBot extends UntypedActor {
 
     public void sendTextMessage(String text) {
         baseBot.sendTextMessage(chatPeer, text);
+    }
+
+    public SimpleKeyValueJava<String> createKeyValue(String name) {
+        return ShardakkaExtension.get(context().system()).simpleKeyValue(name, context().system()).asJava();
     }
 
     public static class Message {

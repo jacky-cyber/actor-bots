@@ -92,10 +92,3 @@ private fun registerToken(clientId: String, clientSecret: String): String? {
         return null;
     }
 }
-
-/**
- * Translation context
- */
-class TranslatingContext {
-    var engine: TranslateEngine? = null
-}
