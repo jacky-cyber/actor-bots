@@ -21,6 +21,9 @@ fun main(args: Array<String>) {
     // Jenny bot
     // system.actorOf(Props.create(JennyBot::class.java, "0d0b4af280ea470d03b4cea11f55e8082bc53986", RemoteBot.DefaultEndpoint()), "JennyBot")
 
+    // Acto Bot
+    system.actorOf(Props.create(MagicBot::class.java, ActoBot::class.java, "dda037f5d3cacd2bd5cad5a2a82cbb4b53041489", RemoteBot.DefaultEndpoint()), "ActoBot")
+
     println("Bots are created")
     system.awaitTermination()
 }
