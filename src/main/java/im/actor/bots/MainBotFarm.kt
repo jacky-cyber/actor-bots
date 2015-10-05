@@ -16,7 +16,7 @@ fun main(args: Array<String>) {
     system.actorOf(Props.create(MagicBot::class.java, BotFather::class.java, "4e2d3c8c83e14584e46ba949a8ea7d1839b6992e", RemoteBot.DefaultEndpoint()), "BotFather")
 
     // Translator
-    system.actorOf(Props.create(MagicBot::class.java, Translator::class.java, "edd82ccb77a9ddc592ff742bd45f278ec978050f", RemoteBot.DefaultEndpoint()), "Translator")
+    // system.actorOf(Props.create(MagicBot::class.java, Translator::class.java, "edd82ccb77a9ddc592ff742bd45f278ec978050f", RemoteBot.DefaultEndpoint()), "Translator")
 
     // Jenny bot
     // system.actorOf(Props.create(JennyBot::class.java, "0d0b4af280ea470d03b4cea11f55e8082bc53986", RemoteBot.DefaultEndpoint()), "JennyBot")

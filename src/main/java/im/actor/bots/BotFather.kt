@@ -22,7 +22,7 @@ class BotFather(baseBot: RemoteBot, chat: BotMessages.OutPeer) : MagicForkBot(ba
                 "/cancel - cancelling current action"
     }
 
-    override fun onReceive(command: String, args: String?, sender: BotMessages.UserOutPeer): Boolean {
+    override fun onReceive(command: String, args: Array<out String>, text: String, sender: BotMessages.UserOutPeer): Boolean {
 
         when (command) {
             "newbot" -> {

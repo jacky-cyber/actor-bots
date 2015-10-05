@@ -1,7 +1,8 @@
 package im.actor.bots.magic;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 import akka.actor.ActorRef;
 import akka.actor.PoisonPill;
@@ -31,6 +32,7 @@ public class MagicForkBot extends UntypedActor {
     private BotMessages.OutPeer chatPeer;
 
     private ActorRef forked;
+    private ActorRef forwarded;
 
     public MagicForkBot(RemoteBot baseBot, BotMessages.OutPeer chatPeer) {
         this.baseBot = baseBot;
@@ -85,7 +87,11 @@ public class MagicForkBot extends UntypedActor {
         if (o instanceof Message) {
             Message msg = (Message) o;
 
-            if (forked != null) {
+            if (forwarded != null) {
+
+                // If Actor forwarded
+                forwarded.forward(o, context());
+            } else if (forked != null) {
 
                 // If Actor forked
                 forked.forward(o, context());
@@ -113,6 +119,7 @@ public class MagicForkBot extends UntypedActor {
             if (forked == t.getActor()) {
                 forked = null;
                 onForkClosed();
+                context().parent().tell(new ChildForkClosed(), self());
             }
         } else if (o instanceof Runnable) {
             ((Runnable) o).run();
@@ -122,6 +129,10 @@ public class MagicForkBot extends UntypedActor {
         } else if (o instanceof Dismiss) {
             onDismissed();
             self().tell(PoisonPill.getInstance(), self());
+        } else if (o instanceof ChildForked) {
+            onChildForked(sender());
+        } else if (o instanceof ChildForkClosed) {
+            onChildForkClosed(sender());
         } else {
             unhandled(o);
         }
@@ -131,14 +142,16 @@ public class MagicForkBot extends UntypedActor {
 
     }
 
-    public void onReceive(ParsedMessage message, BotMessages.UserOutPeer sender) {
+    public final void onReceive(ParsedMessage message, BotMessages.UserOutPeer sender) {
         if (message instanceof MessageCommand) {
             if (!isCommandsSupported) {
                 sendCommandsUnsupported();
             } else {
                 MessageCommand command = (MessageCommand) message;
-                if (!onReceive(command.getCommand(), command.getArgs(), sender)) {
+                List<String> args = command.getArgs();
+                if (!onReceive(command.getCommand(), args.toArray(new String[args.size()]), command.getData(), sender)) {
                     sendUnknownCommand();
+
                 }
             }
         } else if (message instanceof MessageText) {
@@ -150,7 +163,7 @@ public class MagicForkBot extends UntypedActor {
 
     }
 
-    public boolean onReceive(@NotNull String command, @Nullable String args, @NotNull BotMessages.UserOutPeer sender) {
+    public boolean onReceive(@NotNull String command, @NotNull String[] args, @NotNull String text, @NotNull BotMessages.UserOutPeer sender) {
         return false;
     }
 
@@ -162,8 +175,28 @@ public class MagicForkBot extends UntypedActor {
 
     }
 
+    public void onForked() {
+
+    }
+
     public void onForkClosed() {
 
+    }
+
+    public void onChildForked(ActorRef ref) {
+
+    }
+
+    public void onChildForkClosed(ActorRef ref) {
+
+    }
+
+    public void startForwardingTo(ActorRef ref) {
+        forwarded = ref;
+    }
+
+    public void stopForwarding() {
+        forwarded = null;
     }
 
     public void fork(Class clazz, Object... args) {
@@ -180,6 +213,8 @@ public class MagicForkBot extends UntypedActor {
         }
         forked = context().actorOf(props);
         context().watch(forked);
+        onForked();
+        context().parent().tell(new ChildForked(), self());
     }
 
     public final void cancelFork() {
@@ -230,6 +265,14 @@ public class MagicForkBot extends UntypedActor {
     }
 
     private static class Dismiss {
+
+    }
+
+    private static class ChildForked {
+
+    }
+
+    private static class ChildForkClosed {
 
     }
 }

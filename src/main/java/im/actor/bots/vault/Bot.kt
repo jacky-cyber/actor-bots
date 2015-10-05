@@ -1,4 +1,4 @@
-package im.actor.bots
+package im.actor.bots.vault
 
 /**
  * Vault Bot. Stores your secrets.

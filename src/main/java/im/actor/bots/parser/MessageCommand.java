@@ -1,12 +1,16 @@
 package im.actor.bots.parser;
 
+import java.util.List;
+
 public class MessageCommand extends ParsedMessage {
 
     private String command;
-    private String args;
+    private List<String> args;
+    private String data;
 
-    public MessageCommand(String command, String args) {
+    public MessageCommand(String command, List<String> args, String data) {
         this.command = command;
+        this.data = data;
         this.args = args;
     }
 
@@ -14,7 +18,11 @@ public class MessageCommand extends ParsedMessage {
         return command;
     }
 
-    public String getArgs() {
+    public String getData() {
+        return data;
+    }
+
+    public List<String> getArgs() {
         return args;
     }
 }
