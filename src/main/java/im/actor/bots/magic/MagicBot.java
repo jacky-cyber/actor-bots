@@ -19,8 +19,6 @@ public class MagicBot<T extends MagicForkBot> extends RemoteBot {
     public MagicBot(Class<T> forkClass, String token, String endpoint) {
         super(token, endpoint);
         this.forkClass = forkClass;
-
-        // ShardakkaExtension.get(context().system()).simpleKeyValue("msgs", context().system()).asJava();
     }
 
     @Override

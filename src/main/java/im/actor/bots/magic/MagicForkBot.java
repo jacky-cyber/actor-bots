@@ -14,7 +14,6 @@ import im.actor.bots.parser.MessageCommand;
 import im.actor.bots.parser.MessageText;
 import im.actor.bots.parser.ParsedMessage;
 import shardakka.ShardakkaExtension;
-import shardakka.keyvalue.SimpleKeyValue;
 import shardakka.keyvalue.SimpleKeyValueJava;
 
 public class MagicForkBot extends UntypedActor {
@@ -169,9 +168,7 @@ public class MagicForkBot extends UntypedActor {
 
     public void fork(Class clazz, Object... args) {
         Object[] nargs = new Object[args.length + 2];
-        for (int i = 0; i < args.length; i++) {
-            nargs[i] = args[i];
-        }
+        System.arraycopy(args, 0, nargs, 0, args.length);
         nargs[nargs.length - 2] = getBaseBot();
         nargs[nargs.length - 1] = getChatPeer();
         fork(Props.create(clazz, nargs));
