@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 import akka.actor.ActorRef;
-import im.actor.bot.BotMessages;
+import im.actor.bots.BotMessages;
 import im.actor.botkit.RemoteBot;
 import im.actor.bots.parser.MessageCommand;
 

@@ -1,6 +1,5 @@
 package im.actor.bots
 
-import im.actor.bot.BotMessages
 import im.actor.botkit.RemoteBot
 import im.actor.bots.magic.MagicCommandFork
 import im.actor.bots.magic.MagicForkBot

@@ -9,8 +9,8 @@ import akka.actor.PoisonPill;
 import akka.actor.Props;
 import akka.actor.Terminated;
 import akka.actor.UntypedActor;
-import im.actor.bot.BotMessages;
 import im.actor.botkit.RemoteBot;
+import im.actor.bots.BotMessages;
 import im.actor.bots.parser.MessageCommand;
 import im.actor.bots.parser.MessageText;
 import im.actor.bots.parser.ParsedMessage;
@@ -234,7 +234,7 @@ public class MagicForkBot extends UntypedActor {
     }
 
     public void sendTextMessage(String text) {
-        baseBot.sendTextMessage(chatPeer, text);
+        baseBot.requestSendTextMessage(chatPeer, baseBot.nextRandomId(), text);
     }
 
     public SimpleKeyValueJava<String> createKeyValue(String name) {

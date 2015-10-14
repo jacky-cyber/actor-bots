@@ -1,7 +1,7 @@
 package im.actor.bots.magic;
 
-import im.actor.bot.BotMessages;
 import im.actor.botkit.RemoteBot;
+import im.actor.bots.BotMessages;
 
 public class MagicCommandFork extends MagicForkBot {
 

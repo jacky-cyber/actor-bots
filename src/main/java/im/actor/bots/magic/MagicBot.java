@@ -4,8 +4,8 @@ import java.util.HashMap;
 
 import akka.actor.ActorRef;
 import akka.actor.Props;
-import im.actor.bot.BotMessages;
 import im.actor.botkit.RemoteBot;
+import im.actor.bots.BotMessages;
 import im.actor.bots.parser.ParsedMessage;
 
 /**
@@ -27,6 +27,7 @@ public class MagicBot<T extends MagicForkBot> extends RemoteBot {
         ParsedMessage msg = ParsedMessage.matchType(textMessage.text());
         String peerId = textMessage.peer().type() + "_" + textMessage.peer().id();
 
+
         ActorRef dialogRef;
         if (dialogs.containsKey(peerId)) {
             dialogRef = dialogs.get(peerId);
@@ -37,4 +38,23 @@ public class MagicBot<T extends MagicForkBot> extends RemoteBot {
 
         dialogRef.tell(new MagicForkBot.Message(msg, textMessage.sender()), self());
     }
+
+//
+//    @Override
+//    public void onTextMessage(BotMessages.TextMessage textMessage) {
+//        ParsedMessage msg = ParsedMessage.matchType(textMessage.text());
+//        String peerId = textMessage.peer().type() + "_" + textMessage.peer().id();
+//
+//
+//
+//        ActorRef dialogRef;
+//        if (dialogs.containsKey(peerId)) {
+//            dialogRef = dialogs.get(peerId);
+//        } else {
+//            dialogRef = context().actorOf(Props.create(forkClass, this, textMessage.peer()), peerId);
+//            dialogs.put(peerId, dialogRef);
+//        }
+//
+//        dialogRef.tell(new MagicForkBot.Message(msg, textMessage.sender()), self());
+//    }
 }
