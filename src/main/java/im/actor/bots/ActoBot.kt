@@ -16,7 +16,7 @@ import java.util.*
 class ActoBot(baseBot: RemoteBot, chat: BotMessages.OutPeer) : MagicMergedBot(baseBot, chat) {
 
     init {
-        startMessage = "Hi! I am Actor Bot and i can do various funny and usefull stuff for you. First of all, you can use this " +
+        startMessage = "Hi! I am Actor Bot and i can do various funny and useful stuff for you. First of all, you can use this " +
                 "conversation to store any personal information, no one will see this except you.\n" +
                 "\n" +
                 "I can remind you about important things to do, help in translating chats or you can" +
